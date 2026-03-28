@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Explore
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-4">
+
+<h3 class="fw-bold">
+
+<i class="bi bi-robot"></i>
+
+AI Explore
+
+</h3>
+
+<p class="text-muted">
+
+Discussions discovered by AI based on posts from people you follow
+
+</p>
+
+</div>
+
+
+{% if topics %}
+
+{% for topic in topics %}
+
+<div class="card shadow-sm border-0 rounded-4 mb-4">
+
+<div class="card-body text-start">
+
+<h5 class="fw-bold">
+
+<i class="bi bi-file-text"></i>
+
+{{ topic.title }}
+
+</h5>
+
+<p class="text-muted small">
+
+AI discovered a related discussion you may find interesting.
+
+</p>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<small class="text-muted">
+
+Result #{{ loop.index }}
+
+</small>
+
+<a href="{{ topic.url }}"
+target="_blank"
+class="btn btn-dark btn-sm rounded-pill">
+
+<i class="bi bi-box-arrow-up-right"></i>
+
+Read Discussion
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="card shadow-sm border-0 rounded-4 mt-5">
+
+<div class="card-body text-center text-muted">
+
+<i class="bi bi-search"
+style="font-size:50px;"></i>
+
+<h5 class="mt-3">
+
+No AI results yet
+
+</h5>
+
+<p>
+
+Follow more users and create posts to help AI discover discussions.
+
+</p>
+
+</div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

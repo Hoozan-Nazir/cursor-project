@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Users
+{% endblock %}
+
+{% block main %}
+
+<h3 class="mb-4">
+<i class="bi bi-people"></i>
+Discover Users
+</h3>
+
+<!-- Search -->
+<form method="get" action="/users">
+
+<div class="input-group mb-4">
+
+<input 
+type="text" 
+name="q" 
+placeholder="Search users..."
+class="form-control rounded-start-pill"
+>
+
+<button class="btn btn-dark rounded-end-pill">
+
+<i class="bi bi-search"></i>
+
+</button>
+
+</div>
+
+</form>
+
+
+<!-- Users -->
+{% for user in users %}
+
+<div class="card shadow-sm border-0 rounded-4 mb-3">
+
+<div class="card-body d-flex justify-content-between align-items-center">
+
+<!-- Left side -->
+<div>
+
+<h5 class="mb-1">
+
+<i class="bi bi-person-circle"></i>
+
+{{ user.username }}
+
+</h5>
+
+<a href="/profile/{{user.id}}"
+class="text-muted small text-decoration-none">
+
+View profile →
+
+</a>
+
+</div>
+
+
+<!-- Right side -->
+<div>
+
+{% if user.id in following_ids %}
+
+<form action="/unfollow/{{user.id}}"
+method="post"
+style="display:inline;">
+
+<button class="btn btn-outline-danger btn-sm rounded-pill">
+
+<i class="bi bi-person-dash"></i>
+
+Unfollow
+
+</button>
+
+</form>
+
+{% else %}
+
+<form action="/follow/{{user.id}}"
+method="post"
+style="display:inline;">
+
+<button class="btn btn-primary btn-sm rounded-pill">
+
+<i class="bi bi-person-plus"></i>
+
+Follow
+
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+
+<!-- Empty state -->
+{% if not users %}
+
+<div class="text-center text-muted mt-5">
+
+<i class="bi bi-search"
+style="font-size:40px;"></i>
+
+<p class="mt-2">
+
+No users found
+
+</p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

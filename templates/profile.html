@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<h2>{{ user.username }}</h2>
+
+<hr>
+
+{% if posts %}
+    {% for post in posts %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <p>{{ post.content }}</p>
+
+                <small>{{ post.timestamp }}</small>
+
+                {% if post.user_id == session["user_id"] %}
+
+                <form action="/delete/{{ post.id }}" method="POST">
+
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endfor %}
+{% else %}
+
+<p>No posts</p>
+
+{% endif %}
+
+{% endblock %}

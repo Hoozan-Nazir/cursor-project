@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Create Post
+{% endblock %}
+
+{% block main %}
+
+<div class="card shadow-sm border-0 rounded-4">
+
+<div class="card-body text-start">
+
+<h4 class="fw-bold mb-3">
+
+<i class="bi bi-pencil-square"></i>
+
+Create Post
+
+</h4>
+
+<form action="/post" method="post">
+
+<div class="mb-3">
+
+<textarea 
+name="content"
+class="form-control rounded-3"
+rows="4"
+placeholder="What's happening?"
+required
+style="resize:none;"
+></textarea>
+
+</div>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<small class="text-muted">
+
+Share something with your network
+
+</small>
+
+<div>
+
+<a href="/" class="btn btn-outline-secondary btn-sm rounded-pill">
+
+Cancel
+
+</a>
+
+<button 
+type="submit"
+class="btn btn-primary btn-sm rounded-pill"
+>
+
+<i class="bi bi-send"></i>
+
+Post
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}
