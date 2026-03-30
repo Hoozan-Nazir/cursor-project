@@ -1,1 +1,6 @@
 flask
+sqlite3
+jinja2
+python-dotenv
+exa-py
+flask-session

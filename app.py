@@ -58,6 +58,25 @@ def index():
 
         post["liked"] = len(liked) > 0
 
+    posts = db.execute("""
+    SELECT posts.*, users.username
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY timestamp DESC
+    """)
+
+    for post in posts:
+        post["comments"] = db.execute("""
+        SELECT comments.id,
+            comments.content,
+            comments.user_id,
+            users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.post_id = ?
+        ORDER BY comments.timestamp ASC
+        """, post["id"])
+
     return render_template("index.html", posts=posts)
 
 
@@ -373,6 +392,49 @@ def explore():
         })
 
     return render_template("explore.html", topics=topics)
+
+@app.route("/comment/<int:post_id>", methods=["POST"])
+@login_required
+def comment(post_id):
+
+    content = request.form.get("content")
+
+    if not content:
+        flash("Comment cannot be empty")
+        return redirect("/")
+
+    db.execute(
+        "INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)",
+        session["user_id"],
+        post_id,
+        content
+    )
+
+    return redirect("/")
+
+@app.route("/delete_comment/<int:comment_id>", methods=["POST"])
+@login_required
+def delete_comment(comment_id):
+
+    comment = db.execute(
+        "SELECT * FROM comments WHERE id = ?",
+        comment_id
+    )
+
+    if not comment:
+        flash("Comment not found")
+        return redirect("/")
+
+    if comment[0]["user_id"] != session["user_id"]:
+        flash("Not allowed")
+        return redirect("/")
+
+    db.execute(
+        "DELETE FROM comments WHERE id = ?",
+        comment_id
+    )
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)

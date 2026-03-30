@@ -1,152 +1,134 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Home
+    Home
 {% endblock %}
 
 {% block main %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-
-<h3 class="fw-bold">
-
-<i class="bi bi-house"></i>
-
-Home Feed
-
-</h3>
-
-<a href="/post" class="btn btn-primary rounded-pill">
-
-<i class="bi bi-pencil-square"></i>
-
-Create Post
-
-</a>
-
-</div>
-
-
-{% if posts %}
+<div class="container" style="max-width:700px;">
 
 {% for post in posts %}
 
-<div class="card shadow-sm border-0 rounded-4 mb-4">
+<div class="card mb-3 shadow-sm">
 
-<div class="card-body text-start">
+    <div class="card-body">
 
-<!-- Username -->
-<h6 class="fw-bold mb-2">
+        <h6>
+            <a href="/profile/{{ post.user_id }}" style="text-decoration:none;">
+                {{ post.username }}
+            </a>
+        </h6>
 
-<i class="bi bi-person-circle"></i>
+        <p class="mt-2">
+            {{ post.content }}
+        </p>
 
-{{ post.username }}
+        <small class="text-muted">
+            {{ post.timestamp }}
+        </small>
 
-</h6>
+        <hr>
 
-<!-- Content -->
-<p class="mb-2">
+        <!-- LIKE BUTTON -->
 
-{{ post.content }}
+        <form action="/like/{{ post.id }}" method="post">
 
-</p>
+            <button class="btn btn-sm
+            {% if post.liked %}
+                btn-danger
+            {% else %}
+                btn-outline-danger
+            {% endif %}
+            ">
 
-<!-- Timestamp -->
-<small class="text-muted">
+            ❤️ {{ post.likes }}
 
-<i class="bi bi-clock"></i>
+            </button>
 
-{{ post.timestamp }}
+        </form>
 
-</small>
+        <hr>
 
-<hr>
+        <!-- COMMENT FORM -->
 
-<div class="d-flex justify-content-between align-items-center">
+        <form action="/comment/{{ post.id }}" method="post">
 
-<!-- Like button -->
-<form action="/like/{{ post.id }}" method="POST">
+            <div class="input-group mb-2">
 
-<button class="btn btn-sm rounded-pill
+                <input class="form-control"
+                       name="content"
+                       placeholder="Write a comment..."
+                       required>
 
-{% if post.liked %}
+                <button class="btn btn-outline-primary">
+                    Comment
+                </button>
 
-btn-danger
+            </div>
 
-{% else %}
+        </form>
 
-btn-outline-danger
+        <!-- COMMENTS -->
 
-{% endif %}
+        {% for comment in post.comments %}
 
-">
+        <div class="border rounded p-2 mb-1 bg-light">
 
-{% if post.liked %}
+            <div class="d-flex justify-content-between">
+            
+            <div>
+            
+            <strong>
+            <a href="/profile/{{ comment.user_id }}"
+            style="text-decoration:none;">
+            {{ comment.username }}
+            </a>
+            </strong>
+            
+            <div class="small">
+            {{ comment.content }}
+            </div>
+            
+            </div>
+            
+            {% if comment.user_id == session["user_id"] %}
+            
+            <form action="/delete_comment/{{ comment.id }}" method="post">
+            
+            <button class="btn btn-sm btn-outline-danger">
+            Delete
+            </button>
+            
+            </form>
+            
+            {% endif %}
+            
+            </div>
+            
+            </div>
 
-❤️
+            <strong>
+                <a href="/profile/{{ comment.user_id }}"
+                   style="text-decoration:none;">
+                    {{ comment.username }}
+                </a>
+            </strong>
 
-{% else %}
+            <div class="small">
+                {{ comment.content }}
+            </div>
 
-🤍
+        </div>
 
-{% endif %}
+        {% endfor %}
 
-{{ post.likes }}
-
-</button>
-
-</form>
-
-
-<!-- View profile -->
-<a href="/profile/{{post.user_id}}"
-class="btn btn-outline-dark btn-sm rounded-pill">
-
-<i class="bi bi-person"></i>
-
-Profile
-
-</a>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
 {% endfor %}
 
-{% else %}
-
-<div class="card shadow-sm border-0 rounded-4 mt-5">
-
-<div class="card-body text-center text-muted">
-
-<i class="bi bi-chat-square-text"
-style="font-size:50px;"></i>
-
-<h5 class="mt-3">
-
-No posts yet
-
-</h5>
-
-<p>
-
-Create your first post to start your feed.
-
-</p>
-
-<a href="/post" class="btn btn-primary rounded-pill">
-
-Create Post
-
-</a>
-
 </div>
-
-</div>
-
-{% endif %}
 
 {% endblock %}
